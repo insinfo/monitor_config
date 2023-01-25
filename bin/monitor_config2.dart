@@ -5,7 +5,7 @@ import 'package:monitor_config/monitor_config.dart';
 import 'package:monitor_config/src/display_device_struct.dart';
 import 'package:win32/win32.dart' as win32;
 
-/// rotate primary secondary
+/// rotate secondary display
 void main(List<String> arguments) {
  
   var displays = 0;
@@ -50,7 +50,6 @@ void main(List<String> arguments) {
         } else if (set.orientation.value > Orientation.Clockwise270.value) {
           set.orientation.value = Orientation.Default.value;
         }
-
         modePointer.ref.dmPelsWidth = set.width;
         modePointer.ref.dmPelsHeight = set.height;
         modePointer.ref.dmDisplayOrientation = set.orientation.value;
