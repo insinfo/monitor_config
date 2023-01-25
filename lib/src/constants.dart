@@ -52,3 +52,20 @@ const CDS_SET_PRIMARY = 16;
 const CDS_RESET = 1073741824;
 const CDS_SETRECT = 536870912;
 const CDS_NORESET = 268435456;
+
+
+//https://github.com/rofl0r/microwindows/blob/master/src/include/winctl.h
+//pegar constants do arquivo python nesta URL abaixo
+//https://github.com/pybee/toga-win32/blob/master/toga_win32/libs/constants.py
+const BN_CLICKED = 0;
+const CBS_DROPDOWN = 2;
+const CBS_DROPDOWNLIST = 3;
+const CB_ADDSTRING = 323;
+const CB_SETCURSEL = 334;
+
+const CBN_SELCHANGE = 1;
+const CB_GETLBTEXTLEN = 329;
+const CB_GETCURSEL = 327;
+const CB_GETLBTEXT = 328;
+
+var CB_ERR = (-1);

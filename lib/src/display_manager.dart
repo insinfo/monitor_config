@@ -4,6 +4,8 @@ import 'package:ffi/ffi.dart';
 import 'package:monitor_config/monitor_config.dart';
 import 'package:win32/win32.dart' as win32;
 
+import 'display_device_struct.dart';
+
 /// enum
 class DisplayChangeResult {
   const DisplayChangeResult(this.value);
@@ -69,7 +71,7 @@ class DisplayChangeResult {
     } else if (value == DisplayChangeResult.Restart.value) {
       msg = 'InvalidOperation_Disp_Change_Restart';
     }
-    
+
     return msg;
   }
 }
@@ -140,9 +142,15 @@ class DisplayManager {
     mode.dmDisplayOrientation = set.orientation.value;
     mode.dmBitsPerPel = set.bitCount;
     mode.dmDisplayFrequency = set.frequency;
-
-    var result = ChangeDisplaySettings(modeP, 0);
- print('setDisplaySettings $result');
+    var result;
+    if (displayName != null) {
+      var displayNameP = displayName.toNativeUtf16();
+      result = ChangeDisplaySettingsEx(
+          displayNameP, modeP, 0, CDS_RESET | CDS_UPDATEREGISTRY, nullptr);
+    } else {
+      result = ChangeDisplaySettings(modeP, 0);
+    }
+    print('setDisplaySettings $result');
     String? msg;
     if (result == DisplayChangeResult.BadDualView.value) {
       msg = 'InvalidOperation_Disp_Change_BadDualView';
@@ -201,6 +209,32 @@ class DisplayManager {
         frequency: mode.dmDisplayFrequency);
     calloc.free(modeP);
     return ds;
+  }
+
+  static List<String> listDisplays() {
+    var result1 = 1;
+    var displays = <String>[];
+    for (var idx = 0; result1 != 0; idx++) {
+      final devicePointer = DISPLAY_DEVICEW.create();
+      //EDD_GET_DEVICE_INTERFACE_NAME
+      result1 = EnumDisplayDevices(nullptr, idx, devicePointer, 0);
+      final currentDeviceName = devicePointer.ref.DeviceName.toNativeUtf16();
+      if (result1 == 0) {
+        break;
+      }
+      var modePointer = DEVMODE.create();
+
+      // Read the current settings
+      var result2 = EnumDisplaySettings(
+          currentDeviceName, ENUM_CURRENT_SETTINGS, modePointer);
+
+      if (result2 == 1) {
+        displays.add(devicePointer.ref.DeviceName);
+      }
+      calloc.free(modePointer);
+      calloc.free(devicePointer);
+    }
+    return displays;
   }
 }
 

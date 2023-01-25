@@ -87,3 +87,5 @@ final _EnumDisplayDevices = _user32.lookupFunction<
         int iDevNum,
         Pointer<DISPLAY_DEVICEW> lpDisplayDevice,
         int dwFlags)>('EnumDisplayDevicesW');
+
+

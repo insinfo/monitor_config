@@ -45,7 +45,7 @@ class DISPLAY_DEVICEW extends Struct {
     final stringToStore = value.padRight(32, '\x00');
     for (var i = 0; i < 32; i++) {
       DeviceNameP[i] = stringToStore.codeUnitAt(i);
-    }
+    }    
   }
 
   /// WCHAR DeviceString[128];
