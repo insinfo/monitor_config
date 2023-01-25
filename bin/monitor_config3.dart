@@ -90,7 +90,7 @@ int mainWindowProc(int hWnd, int uMsg, int wParam, int lParam) {
           switch (LOWORD(wParam)) {
             case IDC_BUTTON1:
               print('btn clicked');
-              DisplayManager.rotateScreen(true,displayName: displaySelected);
+              DisplayManager.rotateScreen(true, displayName: displaySelected);
               return 0;
           }
           return 0;
@@ -122,7 +122,12 @@ int mainWindowProc(int hWnd, int uMsg, int wParam, int lParam) {
 // An optional approach to launching a GUI app that lets you use a more
 // traditional WinMain entry point, rather than having to manually retrieve the
 // hInstance and nShowCmd parameters.
-void main() => initApp(winMain);
+void main() {
+ // final hInstance = GetModuleHandle(nullptr);
+  //ShowWindow(GetConsoleWindow(), SW_HIDE);
+ //ShowWindow(hInstance, SW_HIDE);
+  initApp(winMain);
+}
 
 // Instance handle
 int g_hInstance = 0;
@@ -173,6 +178,8 @@ void winMain(int hInstance, List<String> args, int nShowCmd) {
 
   ShowWindow(hWnd, nShowCmd);
   UpdateWindow(hWnd);
+
+
 
   // Run the message loop.
   final msg = calloc<MSG>();
