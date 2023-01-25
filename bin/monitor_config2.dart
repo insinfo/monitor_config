@@ -4,12 +4,10 @@ import 'package:ffi/ffi.dart';
 import 'package:monitor_config/monitor_config.dart';
 import 'package:monitor_config/src/display_device_struct.dart';
 import 'package:win32/win32.dart' as win32;
-/// rotaciona o monitor secundario
-void main(List<String> arguments) {
-  //print(DisplayManager.getCurrentSettings());
 
-//DisplayManager.rotateScreen(true, displayName: r'\\.\DISPLAY1');
-  //print(DisplayManager.getCurrentSettings());
+/// rotate primary secondary
+void main(List<String> arguments) {
+ 
   var displays = 0;
   var result1 = 1;
   for (var idx = 0; result1 != 0; idx++) {
@@ -29,14 +27,17 @@ void main(List<String> arguments) {
     var result2 = EnumDisplaySettings(
         currentDeviceName, ENUM_CURRENT_SETTINGS, modePointer);
     //print('EnumDisplaySettings result: $result2');
-    
+
     if (result2 == 1) {
+      //only secundary display
       if (devicePointer.ref.StateFlags != 5) {
         print('''StateFlags ${devicePointer.ref.StateFlags} ''');
         print('''${devicePointer.ref.DeviceName} 
           Width: ${modePointer.ref.dmPelsWidth} Height: ${modePointer.ref.dmPelsHeight} 
           Orientation ${modePointer.ref.dmDisplayOrientation} Frequency ${modePointer.ref.dmDisplayFrequency} bitCount ${modePointer.ref.dmBitsPerPel}
           ''');
+
+        calloc.free(devicePointer);
         //---------------------- rotate ----------------------
         var set = DisplayManager.createDisplaySettingsObject(-1, modePointer);
 
